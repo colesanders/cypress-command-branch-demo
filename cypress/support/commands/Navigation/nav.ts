@@ -1,3 +1,4 @@
+import { CommandSchema } from '../schema.model';
 import { NavChainable } from './nav.model';
 
 declare global {
@@ -13,19 +14,15 @@ declare global {
   }
 }
 
-Cypress.Commands.add('nav', { prevSubject: 'optional' }, (Subject) =>
-  cy.wrap(Subject, { log: false })
-);
-
-const back = (item: string) => {
+const back = () => {
   cy.get('ion-back-button').last().click();
 };
 
-const homeButton = (item: string) => {
+const homeButton = () => {
   cy.get(`[data-cy=home-button]`).should('have.class', 'ion-activatable').click();
 };
 
-const home = (item: string) => {
+const home = () => {
   cy.safeVisit('/');
   // Wait For Loading Requests Here:
   cy.breathe();
@@ -45,29 +42,14 @@ const menu = (item: string) => {
     .should('not.be.visible');
 };
 
-const fnsToReg = [
-  { name: 'home', function: home },
-  { name: 'back', function: back },
-  { name: 'homeButton', function: homeButton },
-  { name: 'menu', function: menu },
-];
-
-const register = () =>
-  fnsToReg.forEach((fn) =>
-    Cypress.Commands.add(fn.name, { prevSubject: 'optional' }, (Subject, item) => {
-      fn.function(item);
-      return cy.wrap(Subject, { log: false });
-    })
-  );
-
-register();
-
-// Cypress.Commands.add('nav', { prevSubject: 'optional' }, (Subject) => {
-//   return new Cypress.Promise((resolve) => resolve(nav));
-// });
-
-Cypress.Commands.add('exit', { prevSubject: 'optional' }, (Subject) =>
-  cy.wrap(Subject, { log: false })
-);
+export const nav: CommandSchema = {
+  name: 'nav',
+  props: {
+    home,
+    back,
+    homeButton,
+    menu,
+  },
+};
 
 export { NavChainable } from './nav.model';

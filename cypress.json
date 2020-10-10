@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost:8100",
+  "baseUrl": "http://localhost:4200",
   "shadowDomSupport": true,
   "viewportWidth": 414,
   "viewportHeight": 896
